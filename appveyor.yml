@@ -1,0 +1,27 @@
+image: Visual Studio 2022
+platform: Any CPU
+configuration: Release
+
+before_build:
+  - nuget restore
+
+build:
+  parallel: true
+  project: DspPlanner.sln
+
+test_script:
+  - cmd: dotnet test DspPlanner.UnitTests\bin\%CONFIGURATION%\netcoreapp3.0\DspPlanner.UnitTests.dll
+  - cmd: nunit3-console DspPlanner.UnitTests\bin\%CONFIGURATION%\net46\DspPlanner.UnitTests.dll --result=DspPlanner.UnitTests.net46.xml;format=AppVeyor
+  - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\DspPlanner.UnitTests.net46.xml))
+  - cmd: nunit3-console DspPlanner.UnitTests\bin\%CONFIGURATION%\net48\DspPlanner.UnitTests.dll --result=DspPlanner.UnitTests.net48.xml;format=AppVeyor
+  - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\DspPlanner.UnitTests.net48.xml))
+
+artifacts:
+  - path: DspPlanner*\bin\$(configuration)\DspPlanner.*.nupkg
+
+notifications:
+  # Email
+  - provider: Email
+    to:
+      - alex.davidson@bluewire-technologies.com
+      
