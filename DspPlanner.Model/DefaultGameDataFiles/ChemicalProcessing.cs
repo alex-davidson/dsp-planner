@@ -11,6 +11,13 @@ internal class ChemicalProcessing : DefaultGameDataBase
                 Item.List(
                     new Item("Hydrogen").Volume(1),
                     new Item("Refined Oil").Volume(2))),
+            new Recipe("X-Ray Cracking", OilRefineryType, new Duration(4),
+                Item.List(
+                    new Item("Hydrogen").Volume(2),
+                    new Item("Refined Oil").Volume(1)),
+                Item.List(
+                    new Item("Energetic Graphite").Volume(1),
+                    new Item("Refined Oil").Volume(2))),
 
             new Recipe("Sulfuric Acid", ChemicalPlantType, new Duration(6),
                 Item.List(
